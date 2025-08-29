@@ -3,19 +3,29 @@ const app = express();
 
 app.use(express.json());
 
-const FULL_NAME = 'buduri_veera_shankara_anjan_teja';        
-const DOB_DDMMYYYY = '21082005';     
-const EMAIL = 'rameezanjan123@gmail.com';        
-const ROLL_NUMBER = '22BCE20141';    
+const FULL_NAME = 'buduri_veera_shankara_anjan_teja'; // lowercase
+const DOB_DDMMYYYY = '21082005';
+const EMAIL = 'rameezanjan123@gmail.com';
+const ROLL_NUMBER = '22BCE20141';
 
-function isNumericString(s) { return typeof s === 'string' && /^[0-9]+$/.test(s); }
-function isAlphabeticString(s) { return typeof s === 'string' && /^[A-Za-z]+$/.test(s); }
+function isNumericString(s) {
+  return typeof s === 'string' && /^[0-9]+$/.test(s);
+}
 
+function isAlphabeticString(s) {
+  return typeof s === 'string' && /^[A-Za-z]+$/.test(s);
+}
+
+// Build alternating-caps reverse concatenation from alphabetic tokens
 function alternatingCapsReverseConcat(alphaItems) {
   const letters = [];
-  for (const item of alphaItems) for (const ch of item) letters.push(ch);
+  for (const item of alphaItems) {
+    for (const ch of item) letters.push(ch);
+  }
   const reversed = letters.reverse();
-  return reversed.map((ch, idx) => (idx % 2 === 0 ? ch.toUpperCase() : ch.toLowerCase())).join('');
+  return reversed
+    .map((ch, idx) => (idx % 2 === 0 ? ch.toUpperCase() : ch.toLowerCase()))
+    .join('');
 }
 
 app.post('/bfhl', (req, res) => {
@@ -93,11 +103,14 @@ app.post('/bfhl', (req, res) => {
   }
 });
 
+// Health check
 app.get('/', (req, res) => res.status(200).json({ status: 'ok' }));
 
+// Local-only listener (Vercel ignores listen, but local dev uses it)
 const PORT = process.env.PORT || 3000;
 if (process.env.LOCAL_DEV === 'true') {
   app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 }
 
 module.exports = app;
+
